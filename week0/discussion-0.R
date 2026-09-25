@@ -37,7 +37,8 @@ country_vector <- gdw_df[["country"]]
 
 gdw_df |> 
   group_by(dam_type) |> 
-  summarise(count=n())
+  summarise(count=n()) |> 
+  ungroup()
 
 sub_dam <- gdw_df |> 
   filter(dam_type == "Dam")
@@ -47,7 +48,8 @@ gdw_df <- gdw_df |>
 
 gdw_df |> 
   group_by(country) |> 
-  summarize(mean_dam_height = mean(dam_hgt_m)) |> 
+  summarize(mean_dam_height = mean(dam_hgt_m, na.rm = TRUE)) |> 
+  ungroup() |> 
   ggplot(
     aes(x=country, y=mean_dam_height)
   ) + geom_bar(stat = "identity")  + labs(x = "Country",
