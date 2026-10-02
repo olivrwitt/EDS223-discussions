@@ -57,9 +57,32 @@ easter_map
 Create a multiple-object map with ggplot2
 ```{r}
 library(ggplot2)
+library(ggspatial)
 ```
 
 ```{r}
+# extract lat & long from geom column 
+volcanoes_point <- ei_points %>%
+  mutate(lon = unlist(map(ei_points$geom,1)), # longitude = first component (x)
+         lat = unlist(map(ei_points$geom,2))) # latitude = second component (y)
+```
+
+
+```{r}
 ggplot() +
-    geom_sf(data=ei_borders, color = "blue")
+    geom_sf(data=ei_borders, color = "blue") +
+    geom_stars(data = ei_elev) +
+    scale_fill_distiller(name = "Elevation (m asl)",
+                       palette = "RdYlGn",
+                       na.value = "lightblue") +
+    geom_sf(data = ei_roads, color = "#343a40") +
+     geom_point(data = volcanoes_point, 
+             aes(x = lon, y = lat, size = elevation),
+             shape = 17, color = "#22577a") + 
+    scale_size_continuous(name = "Volcanoes (m asl)") +
+    ggspatial::annotation_north_arrow(location = "br", which_north = "true") +
+    ggspatial::annotation_scale(location = "bl", width_hint = 0.5) +  
+    labs(title = "Easter Island") +
+    theme_minimal()
+
 ```
