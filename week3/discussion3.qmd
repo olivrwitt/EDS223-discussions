@@ -74,7 +74,14 @@ goleta <- sb_city_boundaries |>
 
 st_crs(goleta)$units  # Check if units are in meters
 
-goleta_buffer_15km <- st_buffer(goleta, dist = 15000) # Create 15 km buffer around Goleta
+goleta_buffer_15km <- st_buffer(goleta, dist = 15000) # Create 15 km buffer around Goleta 
+
+# plot the buffer
+tm_shape(sb_county_boundary) +
+    tm_fill() +
+    tm_shape(goleta_buffer_15km) +
+    tm_borders(lwd = 1, col = "#fb8500") +
+    tm_fill(col = "#fb8500", alpha = 0.2)
 ```
 
 ```{r}
@@ -106,3 +113,4 @@ danger_dist_centroid <- st_distance(goleta_centroid, dangermond_centroid) # Comp
 # Check if the distance matrices are equal
 danger_dist == danger_dist_centroid
 ```
+
